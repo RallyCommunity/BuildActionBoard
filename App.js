@@ -6,6 +6,17 @@ Ext.define('CustomApp', {
         
         console.log(this.getContext().getDataContext());
 
+        // Create a query to grab specific build definitions
+        var query = this._createQuery();             
+
+        // get the build store
+        this._getBuildStore(query);
+
+
+
+        
+
+
         Rally.data.ModelFactory.getModel({
             type:'Build Definition',
             scope:this,
@@ -33,9 +44,7 @@ Ext.define('CustomApp', {
         });
         
         
-        
-        
-        
+
         
         
         var msgBox = Ext.MessageBox;
@@ -51,5 +60,42 @@ Ext.define('CustomApp', {
         
         this.add(myButton);
         
+    },
+    
+    // Creates a query for specific build definitions
+    _createQuery: function(){
+    
+        var q = Ext.create('Rally.data.QueryFilter', {
+            property:'BuildDefinition',
+            operator:'=',
+            value: '/slm/webservice/1.37/builddefinition/6035424766' //PacSystems Mainline Build Definition
+        });
+        
+        return q;
+        
+    },
+    
+    _getBuildStore: function(query){
+        
+        var builds = Ext.create('Rally.data.WsapiDataStore', {
+            model: 'Build',
+            fetch: true,
+            listeners: {
+                load: function(store,data,success) {
+                    console.log("returned with data");
+                    console.log(store,data);
+                }
+            },
+            sorters: [{
+                property: 'CreationDate',
+                direction: 'DESC'
+            }],
+            filters: query,
+            autoLoad: true,
+            pageSize:20
+        });
     }
+        
+    
+    
 });
