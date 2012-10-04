@@ -2,6 +2,9 @@ Build Action Board
 ==================
 
 ## Value
+Provides a single point of build health across all projects.
+Improves CI cycle time by making visible build health and commit batch sizes.
+Also facilitates collaboration by claiming and notifying ownership of who is fixing the build.
 
 ## Overview
 
@@ -18,8 +21,8 @@ changeset and test case failures.
 <table>
 <tr><td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"><img width="400"
 src="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"></a></td>
-<td>foo<a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-Integrated.png"><img width="400"
-src="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"></a></td></tr>
+<td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-Integrated.png"><img width="400"
+src="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-Integrated.png"></a></td></tr>
 <tr><td>Heads Up Display (HUD)</td><td>Integrated Build Apps</td></tr>
 </table>
 
