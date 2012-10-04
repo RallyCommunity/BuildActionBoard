@@ -213,6 +213,12 @@ Ext.define('CustomApp', {
         console.log("Grid Array:");
         console.log(gridFormattedBuilds);
 
+        // Motion Hack - fix junked motion build ID's
+        if (count >= 3)
+        {
+            gridFormattedBuilds[2].CurrentBuild = 'MOTION_CI_R59632_40E1'; 
+            gridFormattedBuilds[2].LastGoodBuild = 'MOTION_CI_R59632_40E1'; 
+        }
 
         //pipe it into a store
         Ext.create('Ext.data.Store', {
