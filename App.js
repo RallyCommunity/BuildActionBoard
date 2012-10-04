@@ -203,11 +203,15 @@ Ext.define('CustomApp', {
             gridFormattedBuilds[count].CurrentBuild = buildStructure[buildDef].builds[0].get("Number");
             gridFormattedBuilds[count].LastGoodBuild = buildStructure[buildDef].lastGoodBuild.get("Number");
             gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
+            
+            //field for build refs
+            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
 
             count++;
         });
         console.log("Grid Array:");
-        //console.log(gridFormattedBuilds);
+        console.log(gridFormattedBuilds);
 
 
         //pipe it into a store
@@ -253,7 +257,7 @@ Ext.define('CustomApp', {
         //}
 
         var myGrid = Ext.create('Ext.grid.Panel', {
-            title: 'Build Status',
+//            title: 'Build Status',
             store: Ext.data.StoreManager.lookup('ciBuildStore'),
             columns: [
                 { text: 'Name', dataIndex: 'Name', width: 205 }, 
@@ -271,6 +275,28 @@ Ext.define('CustomApp', {
                 }, 
                 {text: ' Savior', dataIndex: 'Owner', flex: 1}
             ],
+            listeners: {
+                cellclick: function(table, td, cellIndex, record, tr, rowIndex){
+                    // cellIndex 1 is current build
+                    //todo qualify index into array
+                    if (cellIndex === 1)
+                    {
+                        console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
+    		Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
+
+                        
+                    }
+                    
+                    if (cellIndex === 2)
+                    {
+                        console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
+                        console.log(gridFormattedBuilds[rowIndex].LastGoodBuildRef);
+                        Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].LastGoodBuildRef);
+                    }   
+                    console.log("cell click %d %d",cellIndex, rowIndex);
+                    
+                }
+            },
             height: 200
             //            plugins: [{
             //                ptype: 'rowexpander',
