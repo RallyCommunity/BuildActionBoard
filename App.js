@@ -1,13 +1,16 @@
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',
     componentCls: 'app',
+    layout:{
+        type:'fit'
+        },
 
     launch: function() {
         
         this._loadBuildDefs();
 
 
-        Rally.data.ModelFactory.getModel({
+/*        Rally.data.ModelFactory.getModel({
             type:'Build Definition',
             scope:this,
             success: function(model){
@@ -29,7 +32,8 @@ Ext.define('CustomApp', {
             }
             
         });
-        
+*/
+
     },
     
     // Creates a query for specific build definitions
@@ -201,12 +205,37 @@ Ext.define('CustomApp', {
         });
         console.log("Grid Array:");
         console.log(gridFormattedBuilds);
-
+        
+        
+        //pipe it into a store
+        Ext.create('Ext.data.Store', {
+            storeId:'ciBuildStore',
+            fields:['Name', 'Status', 'CurrentBuild', 'LastGoodBuild'],
+            data: gridFormattedBuilds
+            
+        });
+        
+        var myGrid = Ext.create('Ext.grid.Panel', {
+            title: 'Build Status',
+            store: Ext.data.StoreManager.lookup('ciBuildStore'),
+            columns: [
+                { text: 'Name',  dataIndex: 'Name', flex:1 },
+                { text: 'Status', dataIndex: 'Status', flex:1 },
+                { text: 'Current Build', dataIndex: 'CurrentBuild', flex:1 },
+                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', flex:1 }
+            ],
+            height: 200
+//            width: "100%",
+        });
+        
+        this.add(myGrid);
 
     }
     
     
-        
+            
     
     
 });
+
+
