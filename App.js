@@ -215,12 +215,22 @@ Ext.define('CustomApp', {
             
         });
         
+        
+        // Color
+        var statusTpl = new Ext.XTemplate(
+            "<tpl switch='Status'>",
+                "<tpl case=\'SUCCESS'>",
+                    "<div style='background-color:#07C600; width:100%'> &nbsp; </div>",    
+                "<tpl default>",
+                    "<div style='background-color:#FF0000; width:100%'> &nbsp; </div>",    
+            "</tpl>"
+        );
         var myGrid = Ext.create('Ext.grid.Panel', {
             title: 'Build Status',
             store: Ext.data.StoreManager.lookup('ciBuildStore'),
             columns: [
                 { text: 'Name',  dataIndex: 'Name', flex:1 },
-                { text: 'Status', dataIndex: 'Status', flex:1 },
+                { text: 'Status', dataIndex: 'Status', flex:1, xtype:'templatecolumn', tpl:statusTpl },
                 { text: 'Current Build', dataIndex: 'CurrentBuild', flex:1 },
                 { text: 'Last Good Build', dataIndex: 'LastGoodBuild', flex:1 }
             ],
