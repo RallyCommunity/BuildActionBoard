@@ -232,21 +232,21 @@ Ext.define('CustomApp', {
         var statusTpl = new Ext.XTemplate(
             "<tpl switch='Status'>", 
                 "<tpl case='SUCCESS'>", 
-                    "<div style='background-color:#07C600; width:100%'> {Status}; </div>", 
+                    "<div style='background-color:#07C600; width:100%; padding: 3px'> {Status}; </div>", 
                 "<tpl default>", 
-                    "<div style='background-color:#FF0000; width:100%'> {Status}; </div>", 
+                    "<div style='background-color:#FF0000; width:100%; padding: 3px'> {Status}; </div>", 
             "</tpl>");
         var currentBuildTpl = new Ext.XTemplate(
             "<tpl switch='Status'>", 
                 "<tpl case='SUCCESS'>", 
-                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%'> {CurrentBuild} </div>", 
+                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%; padding: 3px'> {CurrentBuild} </div>", 
                 "<tpl default>", 
-                    "<div style='background-color:#FF0000; color:#FFF;font-weight:bold; width:100%'> {CurrentBuild} </div>", 
+                    "<div style='background-color:#FF0000; color:#FFF;font-weight:bold; width:100%; padding: 3px'> {CurrentBuild} </div>", 
             "</tpl>");
 
         var lastGoodBuildTpl = new Ext.XTemplate(
             "<tpl>", 
-                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%'> {LastGoodBuild} </div>", 
+                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%; padding: 3px'> {LastGoodBuild} </div>", 
             "</tpl>");
 
         //{
@@ -270,16 +270,24 @@ Ext.define('CustomApp', {
 //                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
                 { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
                 { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
-                { text: 'Failed Builds', dataIndex: 'NumFailedBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
+                { text: 'Num Fails', dataIndex: 'NumFailedBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
                 { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
-                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it.jpg',
+                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
                     iconCls: 'gotItButton',
                     tooltip: 'I got it',
                     handler: function(grid, rowIndex, colIndex) {
                         console.log("Selected row %d", rowIndex);
                     }}],
                 }, 
-                {text: ' Savior', dataIndex: 'Owner', flex: 1}
+                { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
+                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
+                    iconCls: 'buildItButton',
+                    tooltip: 'Launch build now',
+                    handler: function(grid, rowIndex, colIndex) {
+                        console.log("Selected row %d", rowIndex);
+                    }}],
+                }, 
+                {text: 'Build Savior', dataIndex: 'Owner', flex: 1}
             ],
             listeners: {
                 cellclick: function(table, td, cellIndex, record, tr, rowIndex){

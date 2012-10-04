@@ -1,6 +1,8 @@
 todo
 
-- fix motion build ids
-- move status color to builds
 - button outline
+- fix motion build ids
+
+done
 - link builds to CI dashboard
+- move status color to builds
