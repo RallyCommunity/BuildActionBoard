@@ -122,9 +122,11 @@ Ext.define('CustomApp', {
         Ext.Array.forEach(buildDefBuildRecords, function(item){
             build = item;
             buildDef = item.get("BuildDefinition")._ref;
+            //console.log(item.get("BuildDefinition"));
             
             if (!buildStructure.hasOwnProperty(buildDef)){
                 buildStructure[buildDef] = {
+                    buildDefName: item.get("BuildDefinition")._refObjectName,
                     builds:[build],
                     lastBuild:null,
                     failCount:0
@@ -134,7 +136,7 @@ Ext.define('CustomApp', {
             } else {
                 Ext.Array.push(buildStructure[buildDef].builds,build);
 //                console.log("Pushed build  %s",item.get("Number"));
-            }
+            } 
                     
                 
         });
@@ -178,11 +180,29 @@ Ext.define('CustomApp', {
             
             console.log("Build %s Fails %d",buildDef,buildStructure[buildDef].failCount);
            
-           //
-           
         });
+        console.log(buildStructure);        
         
-        console.log(buildStructure);
+        gridFormattedBuilds = [];
+        var count = 0;
+        //format data into a new grid-freindly array
+        Ext.Array.forEach(this.buildDefinitions, function(item){
+            var buildDef = item;
+            
+            gridFormattedBuilds[count] = {};
+            gridFormattedBuilds[count].Name = buildStructure[buildDef].buildDefName; //i.e : "PACSystems Mainline CI Builds"
+
+            //todo: make sure a build exists
+            gridFormattedBuilds[count].Status = buildStructure[buildDef].builds[0].get("Status"); 
+            gridFormattedBuilds[count].CurrentBuild = buildStructure[buildDef].builds[0].get("Number"); 
+            gridFormattedBuilds[count].LastGoodBuild = buildStructure[buildDef].lastGoodBuild.get("Number");
+            
+            count++;                
+        });
+        console.log("Grid Array:");
+        console.log(gridFormattedBuilds);
+
+
     }
     
     
