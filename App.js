@@ -270,8 +270,8 @@ Ext.define('CustomApp', {
 //                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
                 { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
                 { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
-                { text: 'Num Fails', dataIndex: 'NumFailedBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
-                { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
+                { text: 'Num Fails', dataIndex: 'NumFailedBuilds', width: 55, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
+                { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
                     icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
                     iconCls: 'gotItButton',
                     tooltip: 'I got it',
@@ -279,10 +279,10 @@ Ext.define('CustomApp', {
                         console.log("Selected row %d", rowIndex);
                     }}],
                 }, 
-                { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
-                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
-                    iconCls: 'buildItButton',
-                    tooltip: 'Launch build now',
+                { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
+                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_build_text.jpg',
+                    iconCls: 'gotItButton',
+                    tooltip: 'I got it',
                     handler: function(grid, rowIndex, colIndex) {
                         console.log("Selected row %d", rowIndex);
                     }}],
