@@ -260,6 +260,7 @@
                         gridFormattedBuilds[count].NumFailedBuilds = 6;
                         gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
                         gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].Owner = 'StephenK';
                         gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
             	    count++;
             	    //  stub in some add'l builds
@@ -284,6 +285,7 @@
                         gridFormattedBuilds[count].NumFailedBuilds = 3;
                         gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
                         gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].Owner = 'EddieG';
                         gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
             	    count++;
             	    //  stub in some add'l builds
@@ -296,6 +298,7 @@
                         gridFormattedBuilds[count].NumFailedBuilds = 1;
                         gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
                         gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].Owner = 'BillH';
                         gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
             	    count++;
             
@@ -317,7 +320,7 @@
                     //pipe it into a store
                     Ext.create('Ext.data.Store', {
                         storeId: 'ciBuildStore',
-                        fields: ['Name', 'Status', 'CurrentBuild', 'LastGoodBuild', 'NumFailedBuilds'],
+                        fields: ['Name', 'Status', 'CurrentBuild', 'LastGoodBuild', 'NumFailedBuilds', 'Owner'],
                         data: gridFormattedBuilds
             
                     });
