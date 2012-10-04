@@ -179,6 +179,7 @@ Ext.define('CustomApp', {
                 else {
                     //                    console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
                     buildStructure[buildDef].lastGoodBuild = build;
+		    buildStructure[buildDef].lastGoodBuildDate = build.get("CreationDate");	
                     return;
                 }
 
@@ -187,6 +188,7 @@ Ext.define('CustomApp', {
             console.log("Build %s Fails %d", buildDef, buildStructure[buildDef].failCount);
 
         });
+	console.log("buildStructure");
         console.log(buildStructure);
 
         gridFormattedBuilds = [];
@@ -207,6 +209,10 @@ Ext.define('CustomApp', {
             //field for build refs
             gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
             gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+
+	    //build def ref
+            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+
 
             count++;
         });
@@ -295,8 +301,21 @@ Ext.define('CustomApp', {
                     //todo qualify index into array
                     if (cellIndex === 1)
                     {
-                        console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
-    		Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
+			// Publish the selected build	                
+			console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
+    			Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
+			
+			// Publish the number of days since the last working build
+			var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
+			var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
+			console.log(dateBrokenBuild);
+
+			var dateBrokenBuild_date = new Date(dateBrokenBuild);
+			var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
+			var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
+			console.log("elapsed days since build: %d",elapsed_days);
+    			
+			Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
 
                         
                     }
@@ -306,6 +325,18 @@ Ext.define('CustomApp', {
                         console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
                         console.log(gridFormattedBuilds[rowIndex].LastGoodBuildRef);
                         Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].LastGoodBuildRef);
+
+			// Publish the number of days since the last working build
+			var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
+			var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
+			console.log(dateBrokenBuild);
+
+			var dateBrokenBuild_date = new Date(dateBrokenBuild);
+			var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
+			var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
+			console.log("elapsed days since build: %d",elapsed_days);
+    			
+			Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
                     }   
                     console.log("cell click %d %d",cellIndex, rowIndex);
                     
@@ -325,3 +356,4 @@ Ext.define('CustomApp', {
     }
 
 });
+
