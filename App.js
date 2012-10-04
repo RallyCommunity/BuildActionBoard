@@ -4,17 +4,7 @@ Ext.define('CustomApp', {
 
     launch: function() {
         
-        console.log(this.getContext().getDataContext());
-
-        // Create a query to grab specific build definitions
-        var query = this._createQuery();             
-
-        // get the build store
-        this._getBuildStore(query);
-
-
-
-        
+        this._loadBuildDefs();
 
 
         Rally.data.ModelFactory.getModel({
@@ -34,57 +24,59 @@ Ext.define('CustomApp', {
                         
                 
             },
-            failure: function(){
-                console.log("failed");
-            },
             context: {
                 workspace: "/workspace/4365660833"
             }
             
         });
         
-        
-
-        
-        
-        var msgBox = Ext.MessageBox;
-        var myButton = Ext.create('Rally.ui.Button',{
-            text:'click me!',
-            handler:function(button,e){
-                msgBox.alert("clicked!");
-            }
-            
-        });
-        
-        
-        
-        this.add(myButton);
-        
     },
     
     // Creates a query for specific build definitions
-    _createQuery: function(){
+    _createQuery: function(buildDefRecords){
     
+        // get first entry
         var q = Ext.create('Rally.data.QueryFilter', {
             property:'BuildDefinition',
             operator:'=',
-            value: '/slm/webservice/1.37/builddefinition/6035424766' //PacSystems Mainline Build Definition
+            value: buildDefRecords[0].get('_ref')
+//            value: '/slm/webservice/1.37/builddefinition/6035424766' //PacSystems Mainline Build Definition
         });
+        
+        // remove teh first entry
+        Ext.Array.remove(buildDefRecords,buildDefRecords[0]);
+        
+        // cycle through the remaineder in the array
+        Ext.Array.forEach(buildDefRecords,function(item, index, allItems){
+            q = q.or(Ext.create('Rally.data.QueryFilter', {
+                property:'BuildDefinition',
+                operator:'=',
+                value: item.get('_ref')
+            }));
+        });
+            
+        console.log("query = ", q.toString());
         
         return q;
         
     },
     
-    _getBuildStore: function(query){
+    _getBuilds: function(buildDefRecords){
+        var query = this._createQuery(buildDefRecords);
         
-        var builds = Ext.create('Rally.data.WsapiDataStore', {
+        
+        Ext.create('Rally.data.WsapiDataStore', {
             model: 'Build',
             fetch: true,
             listeners: {
-                load: function(store,data,success) {
-                    console.log("returned with data");
-                    console.log(store,data);
-                }
+                load: function(store,records,success) {
+                    console.log("Fetched %d builds", records.length);
+                    Ext.Array.forEach(records, function(item) {
+//                        console.log("Name: %s, Def: %s, Status %s", item.get("Number"), item.get("BuildDefinition")._ref, item.get("Status"));
+                    });
+                    this._siftBuilds(records);
+                },
+                scope:this
             },
             sorters: [{
                 property: 'CreationDate',
@@ -92,9 +84,108 @@ Ext.define('CustomApp', {
             }],
             filters: query,
             autoLoad: true,
-            pageSize:20
+            pageSize:100
         });
+    },
+    
+    _loadBuildDefs: function(){
+
+        Ext.create('Rally.data.WsapiDataStore', {
+            model: 'Build Definition',
+            fetch: true,
+            listeners: {
+                load: function(store,records,success) {
+                    console.log("Loaded %d Build Definitions.", records.length);
+    
+                    this.buildDefinitions = [];
+                    Ext.Array.forEach(records,function(item){
+                        Ext.Array.push(this.buildDefinitions,item.get("_ref"));
+                    
+                    },this);
+                    console.log("Build definitions array ",this.buildDefinitions);
+                    
+                    this._getBuilds(records);
+                },
+                scope:this
+            },
+            autoLoad: true
+        });
+        
+    },
+    
+    // creates the build def/ build record data struct
+    _siftBuilds: function(buildDefBuildRecords){
+        
+        var buildStructure = {};
+        
+        // Create a build structure
+        Ext.Array.forEach(buildDefBuildRecords, function(item){
+            build = item;
+            buildDef = item.get("BuildDefinition")._ref;
+            
+            if (!buildStructure.hasOwnProperty(buildDef)){
+                buildStructure[buildDef] = {
+                    builds:[build],
+                    lastBuild:null,
+                    failCount:0
+                };
+//                console.log("Added new build def %s",buildDef);
+                
+            } else {
+                Ext.Array.push(buildStructure[buildDef].builds,build);
+//                console.log("Pushed build  %s",item.get("Number"));
+            }
+                    
+                
+        });
+        
+        //Now update the lastGoodBuild and failCount fields
+        
+        // for each build ref
+        //    for each build
+        //      if build failed
+        //          increment failCount
+        //      else
+        //          set lastGoodBuild
+        //          break;
+        Ext.Array.forEach(this.buildDefinitions, function(item){
+            
+            var buildDef = item;
+            buildStructure[buildDef].failCount = 0;
+
+//            console.log("Working on %s",buildDef);
+
+            Ext.Array.forEach(buildStructure[item].builds, function(item){
+                
+                var build = item;
+                
+                if (build.get("Status") === "FAILURE" )
+                {
+                    if (buildStructure[buildDef].lastGoodBuild == undefined)
+                    {
+                        buildStructure[buildDef].failCount = buildStructure[buildDef].failCount + 1;
+//                        console.log("%s failed, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
+                    } else {
+                        return;
+                    }
+                } else {
+//                    console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
+                    buildStructure[buildDef].lastGoodBuild = build;
+                    return;
+                }
+                
+            });
+            
+            console.log("Build %s Fails %d",buildDef,buildStructure[buildDef].failCount);
+           
+           //
+           
+        });
+        
+        console.log(buildStructure);
     }
+    
+    
         
     
     
