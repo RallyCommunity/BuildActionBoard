@@ -26,6 +26,10 @@ src="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-In
 <tr><td>Heads Up Display (HUD)</td><td>Integrated Build Apps</td></tr>
 </table>
 
+## Screencast
+
+View our video [here](http://screencast.com/t/DXL1ilgMB).
+
 ## Authors
 
 <p>Stephen Kandl &lt;stephen.kandl@ge.com, GE Intelligent Platforms&gt;</p>
