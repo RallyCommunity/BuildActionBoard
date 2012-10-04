@@ -10,7 +10,8 @@ Ext.define('CustomApp', {
         this._loadBuildDefs();
 
 
-        /*        Rally.data.ModelFactory.getModel({
+        /*  // Creates a table using Rally ui      
+            Rally.data.ModelFactory.getModel({
                     type:'Build Definition',
                     scope:this,
                     success: function(model){
@@ -217,9 +218,14 @@ Ext.define('CustomApp', {
 
         });
 
-        console.log("deez");
         // Color
-        var statusTpl = new Ext.XTemplate("<tpl switch='Status'>", "<tpl case='SUCCESS'>", "<div style='background-color:#07C600; width:100%'> &nbsp; </div>", "<tpl default>", "<div style='background-color:#FF0000; width:100%'> &nbsp; </div>", "</tpl>");
+        var statusTpl = new Ext.XTemplate(
+            "<tpl switch='Status'>", 
+                "<tpl case='SUCCESS'>", 
+                    "<div style='background-color:#07C600; width:100%'> {Status}; </div>", 
+                "<tpl default>", 
+                    "<div style='background-color:#FF0000; width:100%'> {Status}; </div>", 
+            "</tpl>");
 
         //{
         //    text: 'Verdict', dataIndex: 'Verdict', width: 95, 
@@ -237,47 +243,22 @@ Ext.define('CustomApp', {
         var myGrid = Ext.create('Ext.grid.Panel', {
             title: 'Build Status',
             store: Ext.data.StoreManager.lookup('ciBuildStore'),
-            columns: [{
-                text: 'Name',
-                dataIndex: 'Name',
-                width: 205
-            }, {
-                text: 'Status',
-                dataIndex: 'Status',
-                flex: 1,
-                xtype: 'templatecolumn',
-                tpl: statusTpl
-            }, {
-                text: 'Current Build',
-                dataIndex: 'CurrentBuild',
-                width: 165
-            }, {
-                text: 'Last Good Build',
-                dataIndex: 'LastGoodBuild',
-                width: 165
-            }, {
-                text: 'Failed Builds',
-                dataIndex: 'NumFailedBuilds',
-                width: 50,
-                tooltip: 'Number of failed builds since the last success',
-                tooltipType: "qtip"
-            }, {
-                menuDisabled: true,
-                sortable: false,
-                xtype: 'actioncolumn',
-                items: [{
+            columns: [
+                { text: 'Name', dataIndex: 'Name', width: 205 }, 
+                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
+                { text: 'Current Build', dataIndex: 'CurrentBuild', width: 165}, 
+                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 165 }, 
+                { text: 'Failed Builds', dataIndex: 'NumFailedBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
+                { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
                     icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it.jpg',
                     iconCls: 'gotItButton',
                     tooltip: 'I got it',
                     handler: function(grid, rowIndex, colIndex) {
                         console.log("Selected row %d", rowIndex);
-                    }
-                }],
-            }, {
-                text: ' Savior',
-                dataIndex: 'Owner',
-                flex: 1
-            }],
+                    }}],
+                }, 
+                {text: ' Savior', dataIndex: 'Owner', flex: 1}
+            ],
             height: 200
             //            plugins: [{
             //                ptype: 'rowexpander',
