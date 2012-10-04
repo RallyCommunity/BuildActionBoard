@@ -16,9 +16,9 @@ and [Build Breakdown](https://github.com/EddieGotherman/BuildBreakdown) apps to 
 changeset and test case failures.
 
 <table>
-<tr><td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"><img width="300"
+<tr><td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"><img width="400"
 src="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"></a><td>
-<td><a href="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"><img width="300"
+<td><a href="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"><img width="400"
 src="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"></a></td></tr>
 <tr><td>Heads Up Display (HUD)</td><td>Integrated Build Apps</td></tr>
 </table>
