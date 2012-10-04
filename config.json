@@ -1,5 +1,5 @@
 {
-    "name": "BuildBreakdown",
+    "name": "BuildActionBoard",
     "className": "CustomApp",
     "server": "https://rally1.rallydev.com",
     "sdk": "2.0p4",
