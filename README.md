@@ -1,6 +1,8 @@
 Build Action Board
 ==================
 
+## Value
+
 ## Overview
 
 Provide at-a-glance status of all builds configured for teams.  
@@ -14,8 +16,9 @@ and [Build Breakdown](https://github.com/EddieGotherman/BuildBreakdown) apps to 
 changeset and test case failures.
 
 <table>
-<tr><td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png">Heads Up Display</td></tr>
-<tr><td><a href="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png">Integrated Build Apps</td></tr>
+<tr><td><a href="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"><img src="https://raw.github.com/skandl/BuildActionBoard/master/build_action_board-HUD.png"></a>Heads Up Display</td></tr>
+<tr><td><a href="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"><img
+src="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-Integrated.png"></a>Integrated Build Apps</td></tr>
 </table>
 
 ## Authors
