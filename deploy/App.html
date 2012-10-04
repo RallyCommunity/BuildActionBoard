@@ -202,10 +202,10 @@
             
                     gridFormattedBuilds = [];
                     var count = 0;
+                    var buildDef = 0;
                     //format data into a new grid-freindly array
                     Ext.Array.forEach(this.buildDefinitions, function(item) {
-                        var buildDef = item;
-            
+             	    buildDef = item;
                         gridFormattedBuilds[count] = {};
                         gridFormattedBuilds[count].Name = buildStructure[buildDef].buildDefName; //i.e : "PACSystems Mainline CI Builds"
             
@@ -225,6 +225,85 @@
             
                         count++;
                     });
+            
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS Spruce 1.0 Rel"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "SUCCESS";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS Profinet Ctlr Rel"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "SUCCESS";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS PNSR Rel"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "FAILURE";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = 6;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS PROFINET Scanner"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "SUCCESS";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS PMM335 2.0 Rel"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "FAILURE";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = 3;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            	    //  stub in some add'l builds
+            	    gridFormattedBuilds[count] = {};
+            	    gridFormattedBuilds[count].Name = "PACS CPU320 Rel"; //i.e : "PACSystems Mainline CI Builds"
+            
+             	    gridFormattedBuilds[count].Status = "FAILURE";
+                        gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
+                        gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
+                        gridFormattedBuilds[count].NumFailedBuilds = 1;
+                        gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
+                        gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
+                        gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
+            	    count++;
+            
+            
+            
+            
+            
+            
                     console.log("Grid Array:");
                     console.log(gridFormattedBuilds);
             
