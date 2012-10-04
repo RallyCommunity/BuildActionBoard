@@ -226,6 +226,18 @@ Ext.define('CustomApp', {
                 "<tpl default>", 
                     "<div style='background-color:#FF0000; width:100%'> {Status}; </div>", 
             "</tpl>");
+        var currentBuildTpl = new Ext.XTemplate(
+            "<tpl switch='Status'>", 
+                "<tpl case='SUCCESS'>", 
+                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%'> {CurrentBuild} </div>", 
+                "<tpl default>", 
+                    "<div style='background-color:#FF0000; color:#FFF;font-weight:bold; width:100%'> {CurrentBuild} </div>", 
+            "</tpl>");
+
+        var lastGoodBuildTpl = new Ext.XTemplate(
+            "<tpl>", 
+                    "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%'> {LastGoodBuild} </div>", 
+            "</tpl>");
 
         //{
         //    text: 'Verdict', dataIndex: 'Verdict', width: 95, 
@@ -245,9 +257,9 @@ Ext.define('CustomApp', {
             store: Ext.data.StoreManager.lookup('ciBuildStore'),
             columns: [
                 { text: 'Name', dataIndex: 'Name', width: 205 }, 
-                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
-                { text: 'Current Build', dataIndex: 'CurrentBuild', width: 165}, 
-                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 165 }, 
+//                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
+                { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
+                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
                 { text: 'Failed Builds', dataIndex: 'NumFailedBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
                 { menuDisabled: true, sortable: false, xtype: 'actioncolumn',items: [{
                     icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it.jpg',
