@@ -1,4 +1,4 @@
-    Rally.onReady(function() {
+
         Ext.define('CustomApp', {
             extend: 'Rally.app.App',
             componentCls: 'app',
@@ -260,19 +260,9 @@
                 
                 this.add(myGrid);
         
-            }
-            
-            
-                    
-            
+            }            
             
         });
-        
-        
 
-        Rally.launchApp('CustomApp', {
-            name: 'BuildActionBoard'
-        });
-});
 
 
