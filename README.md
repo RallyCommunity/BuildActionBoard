@@ -25,5 +25,5 @@ src="https://github.com/skandl/BuildActionBoard/blob/master/build_action_board-I
 
 ## Authors
 
-Stephen Kandl <stephen.kandl@ge.com, GE Intelligent Platforms>
-David Thomas <dthomas@rallydev.com, Rally Software>
+<p>Stephen Kandl <stephen.kandl@ge.com, GE Intelligent Platforms></p>
+<p>David Thomas <dthomas@rallydev.com, Rally Software></p>
