@@ -156,8 +156,14 @@ Ext.define('CustomApp', {
             Ext.Array.forEach(buildStructure[item].builds, function(item) {
 
                 var build = item;
-
-                if (build.get("Status") === "FAILURE") {
+		// if we already found a good build, just return
+		if (buildStructure[buildDef].lastGoodBuild != null)
+		{
+		    return;
+		}
+                
+		// look at the current build
+		if (build.get("Status") === "FAILURE") {
                     if (buildStructure[buildDef].lastGoodBuild == undefined) {
                         buildStructure[buildDef].failCount = buildStructure[buildDef].failCount + 1;
                         //                        console.log("%s failed, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
@@ -167,7 +173,7 @@ Ext.define('CustomApp', {
                     }
                 }
                 else {
-                    //                    console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
+                    console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
                     buildStructure[buildDef].lastGoodBuild = build;
 		    buildStructure[buildDef].lastGoodBuildDate = build.get("CreationDate");	
                     return;
