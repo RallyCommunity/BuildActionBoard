@@ -1,3 +1,16 @@
+/* 
+BuildActionBoard -
+https://github.com/skandl/BuildActionBoard
+
+A Rally webapp that provides at-a-glance continuous integration build status.
+
+Integrates with CI Build Report and Build Breakdown apps to display add'l  info 
+on specific builds clicked in this app.
+
+*/
+
+
+
 Ext.define('CustomApp', {
     extend: 'Rally.app.App',
     componentCls: 'app',
@@ -9,33 +22,10 @@ Ext.define('CustomApp', {
 
         this._loadBuildDefs();
 
-
-        /*  // Creates a table using Rally ui      
-            Rally.data.ModelFactory.getModel({
-                    type:'Build Definition',
-                    scope:this,
-                    success: function(model){
-                        
-                        var myGrid = Ext.create('Rally.ui.grid.Grid',{
-                            model: model,
-                            columnCfgs: [
-                                'Name',
-                                'Description',
-                                'LastStatus'
-                                ]
-                        });
-                        this.add(myGrid);
-                                
-                        
-                    },
-                    context: {
-                        workspace: "/workspace/4365660833"
-                    }
-                    
-                });
-        */
-
     },
+
+
+
 
     // Creates a query for specific build definitions
     _createQuery: function(buildDefRecords) {
@@ -217,93 +207,12 @@ Ext.define('CustomApp', {
             count++;
         });
 
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS Spruce 1.0 Rel"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "SUCCESS";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS Profinet Ctlr Rel"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "SUCCESS";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS PNSR Rel"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "FAILURE";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = 6;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS PROFINET Scanner"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "SUCCESS";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS PMM335 2.0 Rel"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "FAILURE";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = 3;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-	    //  stub in some add'l builds
-	    gridFormattedBuilds[count] = {};
-	    gridFormattedBuilds[count].Name = "PACS CPU320 Rel"; //i.e : "PACSystems Mainline CI Builds"
-
- 	    gridFormattedBuilds[count].Status = "FAILURE";
-            gridFormattedBuilds[count].CurrentBuild = gridFormattedBuilds[0].CurrentBuild;
-            gridFormattedBuilds[count].LastGoodBuild = gridFormattedBuilds[0].LastGoodBuild;
-            gridFormattedBuilds[count].NumFailedBuilds = 1;
-            gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
-            gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
-            gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
-	    count++;
-
-
 
 
 
 
         console.log("Grid Array:");
         console.log(gridFormattedBuilds);
-
-        // Motion Hack - fix junked motion build ID's
-        if (count >= 3)
-        {
-            gridFormattedBuilds[2].CurrentBuild = 'MOTION_CI_R59632_40E1'; 
-            gridFormattedBuilds[2].LastGoodBuild = 'MOTION_CI_R59632_40E1'; 
-        }
 
         //pipe it into a store
         Ext.create('Ext.data.Store', {
@@ -334,36 +243,15 @@ Ext.define('CustomApp', {
                     "<div style='background-color:#07C600; color:#FFF;font-weight:bold; width:100%; padding: 3px'> {LastGoodBuild} </div>", 
             "</tpl>");
 
-        //{
-        //    text: 'Verdict', dataIndex: 'Verdict', width: 95, 
-        //    renderer: function(value){
-        //        if((value === "Fail") || (value === "Error") || (value === "Blocked")){
-        //            return Ext.String.format("<div style='background-color:#FF0000;color:#FFF;font-weight:bold;text-align:center;padding: 3px'>{0}</div>", value);
-        //        } else if ( value === "Inconclusive" ) {
-        //            return Ext.String.format("<div style='background-color:#ccc;color:#000;font-weight:bold;text-align:center;padding: 3px'>{0}</div>", value);
-        //        }else{
-        //            return Ext.String.format("<div style='background-color:#07C600;color:#000;font-weight:bold;text-align:center;padding: 3px'>{0}</div>", value);
-        //        }
-        //    }
-        //}
-
         var myGrid = Ext.create('Ext.grid.Panel', {
 //            title: 'Build Status',
             store: Ext.data.StoreManager.lookup('ciBuildStore'),
             columns: [
-                { text: 'Name', dataIndex: 'Name', width: 205 }, 
+                { text: 'Name', dataIndex: 'Name', width: 205 , flex: 1}, 
 //                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
-                { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
-                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
+                { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, flex: 2, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
+                { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, flex: 2, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
                 { text: 'Num Fails', dataIndex: 'NumFailedBuilds', width: 55, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
-                { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
-                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
-                    iconCls: 'gotItButton',
-                    tooltip: 'I got it',
-                    handler: function(grid, rowIndex, colIndex) {
-                        console.log("Selected row %d", rowIndex);
-                    }}],
-                }, 
                 { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
                     icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_build_text.jpg',
                     iconCls: 'gotItButton',
@@ -372,7 +260,15 @@ Ext.define('CustomApp', {
                         console.log("Selected row %d", rowIndex);
                     }}],
                 }, 
-                {text: 'Build Savior', dataIndex: 'Owner', flex: 1}
+//                { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
+//                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
+//                    iconCls: 'gotItButton',
+//                    tooltip: 'I got it',
+//                    handler: function(grid, rowIndex, colIndex) {
+//                        console.log("Selected row %d", rowIndex);
+//                    }}],
+//                }, 
+//                {text: 'Build Savior', dataIndex: 'Owner', flex: 1}
             ],
             listeners: {
                 cellclick: function(table, td, cellIndex, record, tr, rowIndex){
@@ -433,6 +329,36 @@ Ext.define('CustomApp', {
         this.add(myGrid);
 
     }
+
+
+
+        /*  // Creates a table using Rally ui      
+            Rally.data.ModelFactory.getModel({
+                    type:'Build Definition',
+                    scope:this,
+                    success: function(model){
+                        
+                        var myGrid = Ext.create('Rally.ui.grid.Grid',{
+                            model: model,
+                            columnCfgs: [
+                                'Name',
+                                'Description',
+                                'LastStatus'
+                                ]
+                        });
+                        this.add(myGrid);
+                                
+                        
+                    },
+                    context: {
+                        workspace: "/workspace/4365660833"
+                    }
+                    
+                });
+        */
+
+
+
 
 });
 
