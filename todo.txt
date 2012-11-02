@@ -1,15 +1,7 @@
 todo
 
-- remove "got it" button for the moment
-- autosize columns for a better fit
 
 General CI todos:
 - need build definitions for each build (Spruce, PNC, etc)
-- fix Motion build/svn ids
 
 
-done
-- button outline
-- fix motion build ids
-- link builds to CI dashboard
-- move status color to builds
