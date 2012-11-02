@@ -133,7 +133,8 @@
                                 buildDefName: item.get("BuildDefinition")._refObjectName,
                                 builds: [build],
                                 lastBuild: null,
-                                failCount: 0
+                                failCount: 0,
+                                successCount: 0
                             };
                             //                console.log("Added new build def %s",buildDef);
             
@@ -165,26 +166,26 @@
                         Ext.Array.forEach(buildStructure[item].builds, function(item) {
             
                             var build = item;
-            		// if we already found a good build, just return
-            		if (buildStructure[buildDef].lastGoodBuild != null)
-            		{
-            		    return;
-            		}
+                            // if we already found a good build, just return
+                            if (buildStructure[buildDef].lastGoodBuild != null)
+                            {
+                                return;
+                            }
                             
-            		// look at the current build
-            		if (build.get("Status") === "FAILURE") {
+                            // look at the current build
+                            if (build.get("Status") === "FAILURE") {
                                 if (buildStructure[buildDef].lastGoodBuild == undefined) {
                                     buildStructure[buildDef].failCount = buildStructure[buildDef].failCount + 1;
-            //                        console.log("%s failed, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
+                                    //console.log("%s failed, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
                                 }
                                 else {
                                     return;
                                 }
                             }
                             else {
-            //                    console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
+                                //console.log("%s succeeded, failCount %d",build.get("Number"), buildStructure[buildDef].failCount);
                                 buildStructure[buildDef].lastGoodBuild = build;
-            		    buildStructure[buildDef].lastGoodBuildDate = build.get("CreationDate");	
+                                buildStructure[buildDef].lastGoodBuildDate = build.get("CreationDate");    
                                 return;
                             }
             
@@ -193,7 +194,45 @@
                         console.log("Build %s Fails %d", buildDef, buildStructure[buildDef].failCount);
             
                     });
-            	console.log("buildStructure");
+            
+                    //Now update the successCount
+                    // for each build ref
+                    //    for each build
+                    //      if build succeeded
+                    //          increment successCount
+                    //      else
+                    //          set foundFailedBuild
+                    //          break;
+                    Ext.Array.forEach(this.buildDefinitions, function(item) {
+            
+                        var buildDef = item;
+                        buildStructure[buildDef].successCount = 0;
+            
+                        var foundFail = false;
+            
+                        Ext.Array.forEach(buildStructure[item].builds, function(item) {
+            
+                            var build = item;
+                            // if we already found a good build, just return
+                            if (foundFail)
+                            {
+                                return;
+                            }
+                            
+                            // look at the current build
+                            if (build.get("Status") === "SUCCESS") {
+                                buildStructure[buildDef].successCount = buildStructure[buildDef].successCount + 1;
+                            }
+                            else {
+                                foundFail = true;
+                            }
+            
+                        });
+            
+                        console.log("Build %s Successes %d", buildDef, buildStructure[buildDef].successCount);
+            
+                    });
+                    console.log("buildStructure");
                     console.log(buildStructure);
             
                     gridFormattedBuilds = [];
@@ -201,7 +240,7 @@
                     var buildDef = 0;
                     //format data into a new grid-freindly array
                     Ext.Array.forEach(this.buildDefinitions, function(item) {
-             	    buildDef = item;
+                     buildDef = item;
                         gridFormattedBuilds[count] = {};
                         gridFormattedBuilds[count].Name = buildStructure[buildDef].buildDefName; //i.e : "PACSystems Mainline CI Builds"
             
@@ -210,12 +249,13 @@
                         gridFormattedBuilds[count].CurrentBuild = buildStructure[buildDef].builds[0].get("Number");
                         gridFormattedBuilds[count].LastGoodBuild = buildStructure[buildDef].lastGoodBuild.get("Number");
                         gridFormattedBuilds[count].NumFailedBuilds = buildStructure[buildDef].failCount;
+                        gridFormattedBuilds[count].NumSucceededBuilds = buildStructure[buildDef].successCount;
                         
                         //field for build refs
                         gridFormattedBuilds[count].CurrentBuildRef = buildStructure[buildDef].builds[0].get('_ref');
                         gridFormattedBuilds[count].LastGoodBuildRef = buildStructure[buildDef].lastGoodBuild.get('_ref');
             
-            	    //build def ref
+                    //build def ref
                         gridFormattedBuilds[count].BuildDefinitionRef = buildDef;
             
             
@@ -232,7 +272,7 @@
                     //pipe it into a store
                     Ext.create('Ext.data.Store', {
                         storeId: 'ciBuildStore',
-                        fields: ['Name', 'Status', 'CurrentBuild', 'LastGoodBuild', 'NumFailedBuilds'],
+                        fields: ['Name', 'Status', 'CurrentBuild', 'LastGoodBuild', 'NumFailedBuilds', 'NumSucceededBuilds'],
                         data: gridFormattedBuilds
             
                     });
@@ -264,17 +304,18 @@
                         columns: [
                             { text: 'Name', dataIndex: 'Name', width: 205 , flex: 1}, 
             //                { text: 'Status', dataIndex: 'Status', flex: 1, xtype: 'templatecolumn', tpl: statusTpl},
-                            { text: 'Current Build', dataIndex: 'CurrentBuild', width: 175, flex: 2, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
-                            { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 175, flex: 2, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
-                            { text: 'Num Fails', dataIndex: 'NumFailedBuilds', width: 55, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
-                            { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
-                                icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_build_text.jpg',
-                                iconCls: 'gotItButton',
-                                tooltip: 'I got it',
-                                handler: function(grid, rowIndex, colIndex) {
-                                    console.log("Selected row %d", rowIndex);
-                                }}],
-                            }, 
+                            { text: 'Current Build', dataIndex: 'CurrentBuild', width: 120, flex: 2, xtype: 'templatecolumn', tpl: currentBuildTpl}, 
+                            { text: 'Last Good Build', dataIndex: 'LastGoodBuild', width: 120, flex: 2, xtype: 'templatecolumn', tpl: lastGoodBuildTpl }, 
+                            { text: 'Fails', dataIndex: 'NumFailedBuilds', width: 35, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
+                            { text: 'Successes', dataIndex: 'NumSucceededBuilds', width: 50, tooltip: 'Number of failed builds since the last success', tooltipType: "qtip"},
+                            // { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
+                            //     icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_build_text.jpg',
+                            //     iconCls: 'gotItButton',
+                            //     tooltip: 'I got it',
+                            //     handler: function(grid, rowIndex, colIndex) {
+                            //         console.log("Selected row %d", rowIndex);
+                            //     }}],
+                            // }, 
             //                { menuDisabled: true, width: 80, sortable: false, xtype: 'actioncolumn',items: [{
             //                    icon: 'https://raw.github.com/skandl/BuildActionBoard/master/button_got_it_text.jpg',
             //                    iconCls: 'gotItButton',
@@ -291,21 +332,21 @@
                                 //todo qualify index into array
                                 if (cellIndex === 1)
                                 {
-            			// Publish the selected build	                
-            			console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
-                			Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
-            			
-            			// Publish the number of days since the last working build
-            			var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
-            			var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
-            			console.log(dateBrokenBuild);
+                        // Publish the selected build                    
+                        console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
+                            Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
+                        
+                        // Publish the number of days since the last working build
+                        var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
+                        var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
+                        console.log(dateBrokenBuild);
             
-            			var dateBrokenBuild_date = new Date(dateBrokenBuild);
-            			var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
-            			var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
-            			console.log("elapsed days since build: %d",elapsed_days);
-                			
-            			Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
+                        var dateBrokenBuild_date = new Date(dateBrokenBuild);
+                        var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
+                        var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
+                        console.log("elapsed days since build: %d",elapsed_days);
+                            
+                        Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
             
                                     
                                 }
@@ -316,17 +357,17 @@
                                     console.log(gridFormattedBuilds[rowIndex].LastGoodBuildRef);
                                     Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].LastGoodBuildRef);
             
-            			// Publish the number of days since the last working build
-            			var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
-            			var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
-            			console.log(dateBrokenBuild);
+                        // Publish the number of days since the last working build
+                        var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
+                        var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
+                        console.log(dateBrokenBuild);
             
-            			var dateBrokenBuild_date = new Date(dateBrokenBuild);
-            			var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
-            			var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
-            			console.log("elapsed days since build: %d",elapsed_days);
-                			
-            			Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
+                        var dateBrokenBuild_date = new Date(dateBrokenBuild);
+                        var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
+                        var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
+                        console.log("elapsed days since build: %d",elapsed_days);
+                            
+                        Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
                                 }   
                                 console.log("cell click %d %d",cellIndex, rowIndex);
                                 
