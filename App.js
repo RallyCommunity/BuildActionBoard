@@ -7,6 +7,7 @@ A Rally webapp that provides at-a-glance continuous integration build status.
 Integrates with CI Build Report and Build Breakdown apps to display add'l  info 
 on specific builds clicked in this app.
 
+11/15 - fixed bugs
 */
 
 
@@ -50,7 +51,7 @@ Ext.define('CustomApp', {
             }));
         });
 
-        console.log("query = ", q.toString());
+        //console.log("query = ", q.toString());
 
         return q;
 
@@ -97,7 +98,7 @@ Ext.define('CustomApp', {
                         Ext.Array.push(this.buildDefinitions, item.get("_ref"));
 
                     }, this);
-                    console.log("Build definitions array ", this.buildDefinitions);
+                    //console.log("Build definitions array ", this.buildDefinitions);
 
                     this._getBuilds(records);
                 },
@@ -150,9 +151,15 @@ Ext.define('CustomApp', {
         Ext.Array.forEach(this.buildDefinitions, function(item) {
 
             var buildDef = item;
-            buildStructure[buildDef].failCount = 0;
+            //console.log("Working on %s",buildDef);
 
-            //            console.log("Working on %s",buildDef);
+            // Handle empty builds.
+            if(buildStructure[buildDef] === undefined)
+            {
+                //console.log("empty build, bailing.");
+                return;
+            }
+            buildStructure[buildDef].failCount = 0;
 
             Ext.Array.forEach(buildStructure[item].builds, function(item) {
 
@@ -197,6 +204,13 @@ Ext.define('CustomApp', {
         Ext.Array.forEach(this.buildDefinitions, function(item) {
 
             var buildDef = item;
+
+            if(buildStructure[buildDef] === undefined)
+            {
+                //console.log("empty build, bailing.");
+                return;
+            }
+
             buildStructure[buildDef].successCount = 0;
 
             var foundFail = false;
@@ -231,7 +245,14 @@ Ext.define('CustomApp', {
         var buildDef = 0;
         //format data into a new grid-freindly array
         Ext.Array.forEach(this.buildDefinitions, function(item) {
-         buildDef = item;
+            buildDef = item;
+
+            if(buildStructure[buildDef] === undefined)
+            {
+                //console.log("empty build, bailing.");
+                return;
+            }
+            
             gridFormattedBuilds[count] = {};
             gridFormattedBuilds[count].Name = buildStructure[buildDef].buildDefName; //i.e : "PACSystems Mainline CI Builds"
 
@@ -319,6 +340,13 @@ Ext.define('CustomApp', {
             ],
             listeners: {
                 cellclick: function(table, td, cellIndex, record, tr, rowIndex){
+
+                    // If build definition (column 0)
+                    if (cellIndex === 0){
+                        console.log("publishing...." + gridFormattedBuilds[rowIndex].BuildDefinitionRef);
+                        Rally.environment.getMessageBus().publish('buildDefinitionSelected', gridFormattedBuilds[rowIndex].BuildDefinitionRef);
+                    }
+
                     // cellIndex 1 is current build
                     //todo qualify index into array
                     if (cellIndex === 1)
@@ -326,6 +354,8 @@ Ext.define('CustomApp', {
             // Publish the selected build                    
             console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
                 Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].CurrentBuildRef);
+                Rally.environment.getMessageBus().publish('buildDefinitionSelected', gridFormattedBuilds[rowIndex].BuildDefinitionRef);
+
             
             // Publish the number of days since the last working build
             var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
@@ -347,6 +377,7 @@ Ext.define('CustomApp', {
                         console.log(gridFormattedBuilds[rowIndex].CurrentBuildRef);
                         console.log(gridFormattedBuilds[rowIndex].LastGoodBuildRef);
                         Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].LastGoodBuildRef);
+                        Rally.environment.getMessageBus().publish('buildDefinitionSelected', gridFormattedBuilds[rowIndex].BuildDefinitionRef);
 
             // Publish the number of days since the last working build
             var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
