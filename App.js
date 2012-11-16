@@ -291,8 +291,8 @@ Ext.define('CustomApp', {
         Ext.create('Ext.data.Store', {
             storeId: 'ciBuildStore',
             fields: ['Name', 'Status', 'CurrentBuild', 'LastGoodBuild', 'NumFailedBuilds', 'NumSucceededBuilds'],
-            data: gridFormattedBuilds
-
+            data: gridFormattedBuilds,
+            sorters: ['Name']
         });
 
         // Color
@@ -400,8 +400,7 @@ Ext.define('CustomApp', {
                     console.log("cell click %d %d",cellIndex, rowIndex);
                     
                 }
-            },
-            height: 200
+            }
             //            plugins: [{
             //                ptype: 'rowexpander',
             //                rowBodyTpl: new Ext.XTemplate('foo')
