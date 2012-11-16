@@ -262,6 +262,12 @@
                             return;
                         }
                         
+                        if(buildStructure[buildDef].lastGoodBuild === undefined)
+                        {
+                            console.log("No last good build, bailing.");
+                            return;
+                        }
+            
                         gridFormattedBuilds[count] = {};
                         gridFormattedBuilds[count].Name = buildStructure[buildDef].buildDefName; //i.e : "PACSystems Mainline CI Builds"
             
@@ -388,17 +394,17 @@
                                     Rally.environment.getMessageBus().publish('buildSelected', gridFormattedBuilds[rowIndex].LastGoodBuildRef);
                                     Rally.environment.getMessageBus().publish('buildDefinitionSelected', gridFormattedBuilds[rowIndex].BuildDefinitionRef);
             
-                        // Publish the number of days since the last working build
-                        var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
-                        var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
-                        console.log(dateBrokenBuild);
+                                    // Publish the number of days since the last working build
+                                    var currBuildRef = gridFormattedBuilds[rowIndex].BuildDefinitionRef;
+                                    var dateBrokenBuild = buildStructure[currBuildRef].lastGoodBuild.get('CreationDate');
+                                    console.log(dateBrokenBuild);
             
-                        var dateBrokenBuild_date = new Date(dateBrokenBuild);
-                        var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
-                        var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
-                        console.log("elapsed days since build: %d",elapsed_days);
-                            
-                        Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
+                                    var dateBrokenBuild_date = new Date(dateBrokenBuild);
+                                    var elapsed_ms = Ext.Date.getElapsed(dateBrokenBuild_date);
+                                    var elapsed_days = elapsed_ms / 1000 / 60 / 60 / 24;
+                                    console.log("elapsed days since build: %d",elapsed_days);
+                                        
+                                    Rally.environment.getMessageBus().publish('daysSinceBuild', elapsed_days);
                                 }   
                                 console.log("cell click %d %d",cellIndex, rowIndex);
                                 
